@@ -261,13 +261,13 @@ body {
 }
 
 .up {
-    background: rgb(28, 184, 65); /* this is a green */
+    background: rgb(28, 184, 65);
 }
 
 .down {
-    background: rgb(202, 60, 60); /* this is a maroon */
+    background: rgb(202, 60, 60); 
 }
 
 .create-element {
-    background: rgb(223, 117, 20); /* this is an orange */
+    background: rgb(223, 117, 20); 
 }

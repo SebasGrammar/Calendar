@@ -1,29 +1,45 @@
-<div class="app">
-    <div class="calendar-container">
-      <div class="display-info">
-      </div>
-      <div class="hyper-container">
-        <div class="pretty">
-          <div class="edit-section">
-            <button class="up">up</button>
-            <button class="down">down</button>
-            <button class="create-element">+</button>
-          </div>
-          <h1 class="month"></h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calendar</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="app">
+        <div class="calendar-container">
+            <div class="display-info">
+            </div>
+            <div class="hyper-container">
+                <div class="pretty">
+                    <div class="edit-section">
+                        <button class="up">up</button>
+                        <button class="down">down</button>
+                        <button class="create-element">+</button>
+                    </div>
+                    <h1 class="month"></h1>
+                </div>
+                <div class="days-of-month">
+                    <div class="singleDay opa">Sun</div>
+                    <div class="singleDay opa">Mon</div>
+                    <div class="singleDay opa">Tue</div>
+                    <div class="singleDay opa">Wed</div>
+                    <div class="singleDay opa">Thu</div>
+                    <div class="singleDay opa">Fri</div>
+                    <div class="singleDay opa">Sat</div>
+                </div>
+                <div class="container">
+                </div>
+            </div>
         </div>
-        <div class="days-of-month">
-          <div class="singleDay opa">Sun</div>
-          <div class="singleDay opa">Mon</div>
-          <div class="singleDay opa">Tue</div>
-          <div class="singleDay opa">Wed</div>
-          <div class="singleDay opa">Thu</div>
-          <div class="singleDay opa">Fri</div>
-          <div class="singleDay opa">Sat</div>
-        </div>
-        <div class="container">
-        </div>
-      </div>
+        <audio class="alarm"
+            src="http://www.rkeene.org/archive/quakeworld/quakeforge/fortress/sound/misc/ffact.wav"></audio>
     </div>
-    <audio class="alarm" src="http://www.rkeene.org/archive/quakeworld/quakeforge/fortress/sound/misc/ffact.wav"></audio>
-  </div>
-  
+    <script src="main.js"></script>
+</body>
+
+</html>

@@ -18,7 +18,7 @@ let monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-let dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", 
+let dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday",
 "Thursday", "Friday", "Saturday"]
 
 let date = new Date()
@@ -88,6 +88,10 @@ function soundAlarm() {
 
 function selectElement() {
   //this.style.background = "red"
+}
+
+let savedEvents = {
+
 }
 
 function createDisplay(eventName, description, time) {
@@ -265,6 +269,7 @@ function createElement() {
       selectDay(div)
     })
 
+    let cactus;
 
     addThis.addEventListener("click", close.bind(anotherDiv))
 
@@ -321,6 +326,31 @@ function createElement() {
 
       div.appendChild(event)
 
+      /* SAVED EVENTS */
+
+      if (!savedEvents[yearMonth.year]) {
+        savedEvents[yearMonth.year] = {}
+      }
+
+      if (!savedEvents[yearMonth.year][yearMonth.month]) {
+        savedEvents[yearMonth.year][yearMonth.month] = {}
+      }
+
+      if (!savedEvents[yearMonth.year][yearMonth.month][legend.textContent]) {
+        savedEvents[yearMonth.year][yearMonth.month][legend.textContent] = {}
+      }
+
+      if (!savedEvents[yearMonth.year][yearMonth.month][legend.textContent][input.value]) {
+        savedEvents[yearMonth.year][yearMonth.month][legend.textContent][input.value] = event
+      }
+      
+
+      console.log(savedEvents)
+
+
+
+      /* */
+
       if (!notifications[legend.textContent]) {
 
         notifications[legend.textContent] = []
@@ -342,6 +372,7 @@ function createElement() {
 
     /***************/
     div.addEventListener("click", function() {
+
       currentDivId = legend.textContent
       displayInfo.innerHTML = ""
       for (let eve of div.children) {
@@ -367,7 +398,37 @@ function createElement() {
       }
     }.bind(div))
 
+    // NOW HERE
     //let associatedDisplay = 
+    //console.log(legend.textContent)
+    //console.log(notifications[2019])
+    //div.appendChild(cactus)
+
+    //console.log(savedEvents[innerYear])
+    if (savedEvents[innerYear]) {
+      
+      if (savedEvents[innerYear][innerMonth]) {
+        //console.log(savedEvents[innerYear][innerMonth])
+        for (let child of container.children) {
+          let leg = child.querySelector(".legend")
+          
+          if (savedEvents[innerYear][innerMonth][leg.textContent]) {
+            /*
+            console.log(child)
+            console.log(savedEvents[innerYear][innerMonth][leg.textContent])
+            child.appendChild(savedEvents[innerYear][innerMonth][leg.textContent])
+            */
+
+            for (let ev in savedEvents[innerYear][innerMonth][leg.textContent]) {
+              //console.log(ev)
+              child.appendChild(savedEvents[innerYear][innerMonth][leg.textContent][ev])
+            }
+
+          }
+        }
+      }
+    }
+
 
     /******************/
 
@@ -422,7 +483,7 @@ function compare() {
 
 }
 
-//setInterval(compare, 1000)
+setInterval(compare, 1000)
 
 function addEvent(element) {
 

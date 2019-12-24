@@ -147,7 +147,7 @@ body {
   width: 100%;
   /*height: 30%;*/
   height: ;
-  background: ;
+  background: inherit !important;
   color: black;
   /*padding: 10px;*/
   /*font-size: 30px;*/

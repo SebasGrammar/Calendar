@@ -6,9 +6,6 @@ let displayInfo = document.querySelector(".display-info")
 
 let alarm = document.querySelector(".alarm")
 
-// STILL EXPERIMENTING. PLANNING ON REFACTORING EVERYTHING WHEN
-// I GET THIS TO WORK THE WAY I WANT.
-
 let up = document.querySelector(".up")
 let down = document.querySelector(".down")
 
@@ -56,7 +53,7 @@ down.addEventListener("click", yearMonth.downDate.bind(yearMonth))
 let month = 1;
 
 function countDays(year, month) {
-  return new Date(year, month, 0).getDate(); // 0 + number of days in a month
+  return new Date(year, month, 0).getDate();
 }
 
 function open(e) {
@@ -84,10 +81,6 @@ function soundAlarm() {
   } else {
     notifications[thisDay].shift()
   }
-}
-
-function selectElement() {
-  //this.style.background = "red"
 }
 
 let savedEvents = {
@@ -151,8 +144,6 @@ function createElement() {
     let div = document.createElement("div")
     div.classList.add("singleDay")
 
-    div.addEventListener("click", selectElement)
-
     /* LEGEND ELEMENTS */
     let legend = document.createElement("div")
     legend.classList.add("legend")
@@ -189,12 +180,10 @@ function createElement() {
     } else if (ew <= 0) {
 
       legend.textContent = daysOfLastMonth - firstDay.getDay() + days + 1
-      legend.style.background = "black"
       div.addEventListener("click", yearMonth.downDate.bind(yearMonth))
     } else if (ew >= specifiedDate) {
       legend.textContent = days - firstDay.getDay() - specifiedDate + 1
       legend.style.background = "#FFF"
-      legend.style.background = "black"
       div.addEventListener("click", yearMonth.upDate.bind(yearMonth))
     }
 
@@ -247,9 +236,6 @@ function createElement() {
     createButton.addEventListener("click", function(e) {
       e.stopPropagation()
     })
-
-    //div.addEventListener("click", open.bind(anotherDiv))
-
 
     button.addEventListener("click", close.bind(anotherDiv))
 
@@ -398,29 +384,15 @@ function createElement() {
       }
     }.bind(div))
 
-    // NOW HERE
-    //let associatedDisplay = 
-    //console.log(legend.textContent)
-    //console.log(notifications[2019])
-    //div.appendChild(cactus)
-
-    //console.log(savedEvents[innerYear])
     if (savedEvents[innerYear]) {
       
       if (savedEvents[innerYear][innerMonth]) {
-        //console.log(savedEvents[innerYear][innerMonth])
         for (let child of container.children) {
           let leg = child.querySelector(".legend")
           
           if (savedEvents[innerYear][innerMonth][leg.textContent]) {
-            /*
-            console.log(child)
-            console.log(savedEvents[innerYear][innerMonth][leg.textContent])
-            child.appendChild(savedEvents[innerYear][innerMonth][leg.textContent])
-            */
 
             for (let ev in savedEvents[innerYear][innerMonth][leg.textContent]) {
-              //console.log(ev)
               child.appendChild(savedEvents[innerYear][innerMonth][leg.textContent][ev])
             }
 

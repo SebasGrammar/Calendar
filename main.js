@@ -483,7 +483,7 @@ function compare() {
 
 }
 
-setInterval(compare, 1000)
+//setInterval(compare, 1000)
 
 function addEvent(element) {
 

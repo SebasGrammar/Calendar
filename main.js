@@ -15,40 +15,41 @@ let monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-let dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday",
-"Thursday", "Friday", "Saturday"]
-
 let date = new Date()
 
 let yearMonth = {
   year: date.getFullYear(),
   month: date.getMonth(),
-  upDate() {
-    this.month++
+  status: "",
+  test() {
+
+    this.status == "up" ? this.month++ : this.month--
+
     if (this.month > 11) {
       this.month = 0
       this.year++
-    }
-
-    container.innerHTML = ""
-    createElement()
-
-  },
-  downDate() {
-    this.month--
-    if (this.month < 0) {
+    } else if (this.month < 0) {
       this.month = 11
       this.year--
     }
+
     container.innerHTML = ""
     createElement()
 
   }
 }
 
+up.addEventListener("click", function() {
+  yearMonth.status = "up"
+  yearMonth.test.call(yearMonth)
+  //yearMonth.test.bind(yearMonth)()
+})
 
-up.addEventListener("click", yearMonth.upDate.bind(yearMonth))
-down.addEventListener("click", yearMonth.downDate.bind(yearMonth))
+down.addEventListener("click", function() {
+  yearMonth.status = "down"
+  yearMonth.test.call(yearMonth)
+  //yearMonth.test.bind(yearMonth)()
+})
 
 let month = 1;
 
@@ -57,14 +58,11 @@ function countDays(year, month) {
 }
 
 function open(e) {
-  e.stopPropagation()
   this.style.display = "block"
 }
 
 function close(e) {
-  e.stopPropagation()
   this.style.display = "none"
-
 }
 
 let notifications = {
@@ -74,6 +72,21 @@ let notifications = {
 let thisDay;
 
 let activated = false;
+
+function doThis(container) {
+  for (let child of container.children) {
+    child.addEventListener("click", function(e) {
+      if (this == selectedDay) {
+        for (let thing of container.children) {
+          if (thing.dataset.enabled) {
+            thing.style.background = ""
+          }
+        }
+        this.style.background = "blue"
+      }
+    })
+  }
+}
 
 function soundAlarm() {
   if (activated) {
@@ -110,96 +123,30 @@ function createDisplay(eventName, description, time) {
   return div
 }
 
-function showEvents() {}
+let currentDivId;
 
-function selectDay(div) {
-  for (let element of div.children) {
-    if (element.classList.contains("pepp")) {}
+/* ANOTHER TEST HERE */
+
+function linkEventListener(element, div) {
+  currentDivId = element.textContent
+  displayInfo.innerHTML = ""
+  for (let eve of div.children) {
+    if (eve.classList.contains("pepp")) {
+      let one = eve.querySelector(".test1")
+      let two = eve.querySelector(".time")
+      let three = eve.querySelector(".description")
+      displayInfo.append(createDisplay(one.textContent, three.value, two.value))
+    }
   }
 }
 
-let currentDivId;
+/**/
 
-function createElement() {
-
-  let days = 0;
-  // SEARCH HERE
-  let innerYear = yearMonth.year
-  let innerMonth = yearMonth.month
-
-  let eachDay = document.createElement("div")
-  nameOfMonth.textContent = `${monthNames[yearMonth["month"]]} ${yearMonth["year"]}` // THIS HERE!
-  hyperContainer.appendChild(eachDay)
-
-  let currentDay = Number(date.toString().split(" ")[2]) - 1
-
-  let firstDay = new Date(innerYear, innerMonth, 1)
-
-  let specifiedDate = countDays(innerYear, innerMonth + 1)
-
-  while (days < specifiedDate || days < 42) {
-
-
-    /* DIV ELEMENTS */
-    let div = document.createElement("div")
-    div.classList.add("singleDay")
-
-    /* LEGEND ELEMENTS */
-    let legend = document.createElement("div")
-    legend.classList.add("legend")
-    legend.textContent = days + 1
-
-    /* CREATE ELEMENT WITH BUTTON */
-    div.setAttribute("data-key", days + 1)
-    div.addEventListener("click", function() {
-      selectedDay = this
-    })
-
-    if (days == currentDay) {
-      div.style.background = "orange"
-      thisDay = days + 1
-    } else if (days < firstDay.getDay()) {
-      div.style.background = "#FFF"
-      legend.style.background = "#FFF"
-    } else if (days < currentDay) {
-      div.style.opacity = "0.5"
-      div.style["pointer-events"] = "none"
-    } else if (days >= specifiedDate) {
-      div.style.background = "#FFF"
-
-    }
-
-    let ew = days - firstDay.getDay() + 1
-    let daysOfLastMonth = countDays(innerYear, innerMonth)
-    let daysHere = days
-
-    if ((days >= firstDay.getDay() && days < specifiedDate) || ew <= specifiedDate && ew > 0) {
-      div.style.background = "#F7B658"
-      legend.textContent = ew
-      div.setAttribute("data-enabled", true)
-    } else if (ew <= 0) {
-
-      legend.textContent = daysOfLastMonth - firstDay.getDay() + days + 1
-      div.addEventListener("click", yearMonth.downDate.bind(yearMonth))
-    } else if (ew >= specifiedDate) {
-      legend.textContent = days - firstDay.getDay() - specifiedDate + 1
-      legend.style.background = "#FFF"
-      div.addEventListener("click", yearMonth.upDate.bind(yearMonth))
-    }
-
-
-    if (days == currentDay) {
-      div.style.background = "orange"
-      thisDay = days + 1
-    }
-
-    div.appendChild(legend)
-
-    /* ANOTHERDIV ELEMENTS */
-    let anotherDiv = document.createElement("div")
-    anotherDiv.classList.add("day")
-    anotherDiv.innerHTML =
-      `
+function createAnotherDiv() {
+  let anotherDiv = document.createElement("div")
+  anotherDiv.classList.add("day")
+  anotherDiv.innerHTML =
+    `
     <div class="form">
       <label for="event-title"></label>
       <input class="title" type="text" placeholder="Title" name="event-title" required>
@@ -214,6 +161,110 @@ function createElement() {
       <button class="add">Add</button>
     </div>
     `
+  return anotherDiv
+}
+
+/****/
+
+function setEverything() {
+
+  let innerYear = yearMonth.year
+  let innerMonth = yearMonth.month
+
+  return {
+    innerYear,
+    innerMonth,
+    currentDay: Number(date.toString().split(" ")[2]) - 1,
+    firstDay: new Date(innerYear, innerMonth, 1),
+    specifiedDate: countDays(innerYear, innerMonth + 1)
+
+  }
+
+}
+
+function resetEverything(...args) {
+  //outerInput.value = ""
+  //outerDescription.value = ""
+  //colorCode.value = ""
+
+  args.forEach(element => element.value = "")
+}
+
+function createObject(key, value = {}) {
+  return {
+    [key]: value
+  }
+}
+
+function createElement() {
+
+  let days = 0;
+
+
+  let allHere = setEverything()
+
+  nameOfMonth.textContent = `${monthNames[yearMonth["month"]]} ${yearMonth["year"]}` // THIS HERE!
+
+  while (days < allHere.specifiedDate || days < 42) {
+
+
+    /* DIV ELEMENTS */
+    let div = document.createElement("div")
+    div.classList.add("singleDay")
+
+    /* LEGEND ELEMENTS */
+    let legend = document.createElement("div")
+    legend.classList.add("legend")
+    legend.textContent = days + 1
+
+
+    /* CREATE ELEMENT WITH BUTTON */
+    div.setAttribute("data-key", days + 1)
+    div.addEventListener("click", function() {
+      selectedDay = this
+    })
+
+    if (days == allHere.currentDay) {
+      div.style.background = "orange"
+      thisDay = days + 1
+    } else if (days < allHere.firstDay.getDay()) {
+      div.style.background = "#FFF"
+      legend.style.background = "#FFF"
+    } else if (days < allHere.currentDay) {
+      div.style.opacity = "0.5"
+      div.style["pointer-events"] = "none"
+    } else if (days >= allHere.specifiedDate) {
+      div.style.background = "#FFF"
+
+    }
+
+    let ew = days - allHere.firstDay.getDay() + 1
+    let daysOfLastMonth = countDays(allHere.innerYear, allHere.innerMonth)
+    let daysHere = days
+
+    if ((days >= allHere.firstDay.getDay() && days < allHere.specifiedDate) || ew <= allHere.specifiedDate && ew > 0) {
+      div.style.background = "#F7B658"
+      legend.textContent = ew
+      div.setAttribute("data-enabled", true)
+    } else if (ew <= 0) {
+
+      legend.textContent = daysOfLastMonth - allHere.firstDay.getDay() + days + 1
+      div.addEventListener("click", yearMonth.test.bind(yearMonth))
+    } else if (ew >= allHere.specifiedDate) {
+      legend.textContent = days - allHere.firstDay.getDay() - allHere.specifiedDate + 1
+      legend.style.background = "#FFF"
+      div.addEventListener("click", yearMonth.test.bind(yearMonth))
+    }
+
+    if (days == allHere.currentDay) {
+      div.style.background = "orange"
+      thisDay = days + 1
+    }
+
+    div.appendChild(legend)
+
+    /* ANOTHERDIV ELEMENTS */
+    let anotherDiv = createAnotherDiv()
     anotherDiv.addEventListener("click", function(e) {
       e.stopPropagation()
     })
@@ -250,10 +301,6 @@ function createElement() {
 
 
     let addThis = anotherDiv.querySelector(".add")
-
-    div.addEventListener("click", function() {
-      selectDay(div)
-    })
 
     let cactus;
 
@@ -314,41 +361,27 @@ function createElement() {
 
       /* SAVED EVENTS */
 
-      if (!savedEvents[yearMonth.year]) {
-        savedEvents[yearMonth.year] = {}
-      }
+      let dayNumber = legend.textContent
+      let userInput = input.value
 
-      if (!savedEvents[yearMonth.year][yearMonth.month]) {
-        savedEvents[yearMonth.year][yearMonth.month] = {}
-      }
+      let keys = [yearMonth.year, yearMonth.month, dayNumber, userInput]
+      let lastKey = keys[keys.length - 1]
 
-      if (!savedEvents[yearMonth.year][yearMonth.month][legend.textContent]) {
-        savedEvents[yearMonth.year][yearMonth.month][legend.textContent] = {}
-      }
-
-      if (!savedEvents[yearMonth.year][yearMonth.month][legend.textContent][input.value]) {
-        savedEvents[yearMonth.year][yearMonth.month][legend.textContent][input.value] = event
-      }
-      
-
+      keys.reduce((object, key) => {
+        console.log(object, key)
+        return key !== lastKey ? object[key] = {} : object[key] = event
+      }, savedEvents)
       console.log(savedEvents)
 
 
-
-      /* */
-
-      if (!notifications[legend.textContent]) {
-
-        notifications[legend.textContent] = []
-        notifications[legend.textContent].push(myTime.value)
+      if (notifications[dayNumber]) {
+        notifications[dayNumber].push(myTime.value)
       } else {
-
-        notifications[legend.textContent].push(myTime.value)
+        notifications[dayNumber] = []
+        notifications[dayNumber].push(myTime.value)
       }
 
-      outerInput.value = ""
-      outerDescription.value = ""
-      colorCode.value = ""
+      resetEverything(outerInput, outerDescription, colorCode)
 
     })
 
@@ -357,43 +390,25 @@ function createElement() {
     days++
 
     /***************/
-    div.addEventListener("click", function() {
 
-      currentDivId = legend.textContent
-      displayInfo.innerHTML = ""
-      for (let eve of div.children) {
-        if (eve.classList.contains("pepp")) {
-          let one = eve.querySelector(".test1")
-          let two = eve.querySelector(".time")
-          let three = eve.querySelector(".description")
-          displayInfo.append(createDisplay(one.textContent, three.value, two.value))
-        }
-      }
-    }.bind(div))
+    div.addEventListener("click", function() {
+      linkEventListener.bind(div)(legend, div)
+    })
 
     addThis.addEventListener("click", function() {
-      currentDivId = legend.textContent
-      displayInfo.innerHTML = ""
-      for (let eve of div.children) {
-        if (eve.classList.contains("pepp")) {
-          let one = eve.querySelector(".test1")
-          let two = eve.querySelector(".time")
-          let three = eve.querySelector(".description")
-          displayInfo.append(createDisplay(one.textContent, three.value, two.value))
-        }
-      }
-    }.bind(div))
+      linkEventListener.bind(div)(legend, div)
+    })
 
-    if (savedEvents[innerYear]) {
-      
-      if (savedEvents[innerYear][innerMonth]) {
+    if (savedEvents[allHere.innerYear]) {
+
+      if (savedEvents[allHere.innerYear][allHere.innerMonth]) {
         for (let child of container.children) {
           let leg = child.querySelector(".legend")
-          
-          if (savedEvents[innerYear][innerMonth][leg.textContent]) {
 
-            for (let ev in savedEvents[innerYear][innerMonth][leg.textContent]) {
-              child.appendChild(savedEvents[innerYear][innerMonth][leg.textContent][ev])
+          if (savedEvents[allHere.innerYear][allHere.innerMonth][leg.textContent]) {
+
+            for (let ev in savedEvents[allHere.innerYear][allHere.innerMonth][leg.textContent]) {
+              child.appendChild(savedEvents[allHere.innerYear][allHere.innerMonth][leg.textContent][ev])
             }
 
           }
@@ -407,24 +422,7 @@ function createElement() {
 
   }
 
-  /******* END OF WHILE LOOP - HER*/
-  for (let child of container.children) {
-    child.addEventListener("click", function(e) {
-
-      if (this == selectedDay) {
-        for (let thing of container.children) {
-          if (thing.dataset.enabled) {
-            thing.style.background = ""
-          }
-        }
-
-        this.style.background = "blue"
-
-
-      }
-    })
-  }
-
+  doThis(container)
 
 }
 
